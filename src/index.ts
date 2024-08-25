@@ -1,9 +1,11 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { html } from "hono/html";
 import { validator } from "hono/validator";
 
 const app = new Hono();
+app.use("/*", cors());
 
 function getUniqueTerms(documents: string[]) {
   const uniqueTerms = new Set<string>();
