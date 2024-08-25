@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 import { html } from "hono/html";
 import { validator } from "hono/validator";
 import { calculateTFIDF, rankDocuments } from "./utils/vsm";
-import { head } from "./utils/html";
+import { post_head } from "./utils/html";
 
 const app = new Hono();
 app.use("/*", cors());
@@ -26,8 +26,18 @@ app.get("/", (c) => {
               margin: 0;
               padding: 0;
               display: flex;
-              justify-content: center;
+              flex-direction: column;
+              justify-content: space-between;
               height: 100vh;
+            }
+
+            header {
+              background-color: #218838;
+              padding: 10px;
+              color: #fff;
+              text-align: center;
+              font-size: 24px;
+              font-weight: bold;
             }
 
             h1 {
@@ -40,6 +50,7 @@ app.get("/", (c) => {
               padding: 20px;
               border-radius: 8px;
               width: 100%;
+              box-sizing: border-box;
             }
 
             label {
@@ -71,30 +82,73 @@ app.get("/", (c) => {
             input[type="submit"]:hover {
               background-color: #218838;
             }
+
+            footer {
+              background-color: #f8f9fa;
+              padding: 10px;
+              text-align: center;
+              font-size: 14px;
+              color: #555;
+            }
           </style>
         </head>
         <body>
+          <header>Welcome to VSM</header>
           <form method="POST" action="/">
-            <h1>VSM</h1>
             <label for="query">Query:</label>
-            <input type="text" id="query" name="query" required />
+            <input
+              placeholder="Query"
+              type="text"
+              id="query"
+              name="query"
+              required
+            />
 
             <label for="document_1">Document 1:</label>
-            <input type="text" id="document_1" name="document_1" required />
+            <input
+              placeholder="Document 1"
+              type="text"
+              id="document_1"
+              name="document_1"
+              required
+            />
 
             <label for="document_2">Document 2:</label>
-            <input type="text" id="document_2" name="document_2" required />
+            <input
+              placeholder="Document 2"
+              type="text"
+              id="document_2"
+              name="document_2"
+              required
+            />
 
             <label for="document_3">Document 3:</label>
-            <input type="text" id="document_3" name="document_3" required />
+            <input
+              placeholder="Document 3"
+              type="text"
+              id="document_3"
+              name="document_3"
+              required
+            />
 
             <label for="document_4">Document 4:</label>
-            <input type="text" id="document_4" name="document_4" required />
+            <input
+              placeholder="Document 4"
+              type="text"
+              id="document_4"
+              name="document_4"
+              required
+            />
 
             <input type="submit" value="Calculate" />
           </form>
+          <footer>
+            This website is made by
+            <a href="https://abdeta.dev">Abdeta Terefe</a> and made using
+            <a href="https://hono.dev/">Hono</a>
+          </footer>
         </body>
-      </html>`
+      </html> `
   );
 });
 
@@ -137,7 +191,7 @@ app.post(
 
     const resultHtml = html`<!DOCTYPE html>
       <html lang="en">
-        ${head}
+        ${post_head}
         <body>
           <h1>VSM Result</h1>
 
@@ -294,28 +348,32 @@ app.post(
           </p>
 
           <span
-            >$$ Rank 1: Sim(q,d${rankedDocs[0].docIndex}) =
+            >$$ Rank 1: Doc${rankedDocs[0].docIndex} =
+            Sim(q,d${rankedDocs[0].docIndex}) =
             \\frac{${rankedDocs[0].dotProduct}}{${rankedDocs[0].margitanQuery}
             \\times ${rankedDocs[0].vectorLength}} =
             ${rankedDocs[0].similarity}$$</span
           >
 
           <span
-            >$$ Rank 2: Sim(q,d${rankedDocs[1].docIndex}) =
+            >$$ Rank 2: Doc${rankedDocs[1].docIndex} =
+            Sim(q,d${rankedDocs[1].docIndex}) =
             \\frac{${rankedDocs[1].dotProduct}}{${rankedDocs[0].margitanQuery}
             \\times ${rankedDocs[1].vectorLength}} =
             ${rankedDocs[1].similarity}$$</span
           >
 
           <span
-            >$$ Rank 3: Sim(q,d${rankedDocs[2].docIndex}) =
+            >$$ Rank 3: Doc${rankedDocs[2].docIndex} =
+            Sim(q,d${rankedDocs[2].docIndex}) =
             \\frac{${rankedDocs[2].dotProduct}}{${rankedDocs[0].margitanQuery}
             \\times ${rankedDocs[2].vectorLength}} =
             ${rankedDocs[2].similarity}$$</span
           >
 
           <span
-            >$$ Rank 4: Sim(q,d${rankedDocs[3].docIndex}) =
+            >$$ Rank 4: Doc${rankedDocs[3].docIndex} =
+            Sim(q,d${rankedDocs[3].docIndex}) =
             \\frac{${rankedDocs[3].dotProduct}}{${rankedDocs[0].margitanQuery}
             \\times ${rankedDocs[3].vectorLength}} =
             ${rankedDocs[3].similarity}$$</span
