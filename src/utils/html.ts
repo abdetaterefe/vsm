@@ -61,7 +61,6 @@ export const post_head = html`<head>
       background-color: #e0e0e0;
     }
   </style>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script
     id="MathJax-script"
     async
